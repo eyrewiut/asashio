@@ -40,10 +40,6 @@ const server = polka()
 		next();
 	})
 	.get('/', (_, res) => res.send(200, { message: 'Asashio!' }))
-	.get('/verify', (req, res) => {
-		const accessToken = JWT.decode(cookie.parse(req.headers.cookie));
-		return res.send(200, { access_token: accessToken.access_token });
-	})
 	.get('/discord', (_, res) => res.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${encodeURIComponent(`${process.env.DOMAIN}${process.env.PORT}${process.env.DISCORD_CALLBACK}`)}&response_type=code&scope=${process.env.SCOPES.split(',').join('%20')}`))
 	.get('/discord/callback', async (req, res) => {
 		const accessCode = req.query.code;
