@@ -13,7 +13,7 @@ const logger = require('./logger');
 
 const server = polka()
 	.use(cors({
-		origin: process.env.ORIGINS.split(','),
+		origin: process.env.CORS_ORIGINS.split(','),
 		credentials: true,
 		allowedHeaders: ['Accept', 'Content-Type'],
 		optionsSuccessStatus: 200
@@ -42,17 +42,17 @@ const server = polka()
 		next();
 	})
 	.get('/', (_, res) => res.send(200, { message: 'Asashio!' }))
-	.get('/discord', (_, res) => res.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${encodeURIComponent(`${process.env.DISCORD_CALLBACK_DOMAIN}${process.env.DISCORD_CALLBACK_PORT}${process.env.DISCORD_CALLBACK}`)}&response_type=code&scope=${process.env.SCOPES.split(',').join('%20')}`))
+	.get('/discord', (_, res) => res.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${process.env.DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(`${process.env.DISCORD_CALLBACK_DOMAIN}${process.env.DISCORD_CALLBACK_PORT}${process.env.DISCORD_CALLBACK_ROUTE}`)}&response_type=code&scope=${process.env.SCOPES.split(',').join('%20')}`))
 	.get('/discord/callback', async (req, res) => {
 		const accessCode = req.query.code;
 		if (!accessCode) return res.send(400, { message: 'No access code provided.' });
 
 		const data = new FormData();
-		data.append('client_id', process.env.CLIENT_ID);
-		data.append('client_secret', process.env.CLIENT_SECRET);
+		data.append('client_id', process.env.DISCORD_CLIENT_ID);
+		data.append('client_secret', process.env.DISCORD_CLIENT_SECRET);
 		data.append('grant_type', 'authorization_code');
-		data.append('redirect_uri', `${process.env.DISCORD_CALLBACK_DOMAIN}${process.env.DISCORD_CALLBACK_PORT}${process.env.DISCORD_CALLBACK}`);
-		data.append('scope', process.env.SCOPES.split(',').join(' '));
+		data.append('redirect_uri', `${process.env.DISCORD_CALLBACK_DOMAIN}${process.env.DISCORD_CALLBACK_PORT}${process.env.DISCORD_CALLBACK_ROUTE}`);
+		data.append('scope', process.env.DISCORD_SCOPES.split(',').join(' '));
 		data.append('code', accessCode);
 
 		const response = await (await fetch('https://discordapp.com/api/oauth2/token', {
@@ -62,7 +62,7 @@ const server = polka()
 
 		res.cookie(
 			'token',
-			JWT.sign({ access_token: response.access_token }, process.env.SECRET, { expiresIn: '7d' }),
+			JWT.sign({ access_token: response.access_token }, process.env.JWT_SECRET, { expiresIn: '7d' }),
 			{ path: '/', httpOnly: true, maxAge: 6e8 / 1000, secure: Boolean(process.env.NODE_ENV === 'production') }
 		);
 
