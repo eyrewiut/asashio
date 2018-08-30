@@ -1,4 +1,4 @@
-# Asashio <img src="https://i.imgur.com/MCuvfV4.png" align="right">
+# Asashio <img src="https://i.imgur.com/gIdxOwj.png" align="right">
 > .
 
 I'll get into filling this out later, gotta stay tuned for now.
