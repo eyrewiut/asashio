@@ -61,7 +61,7 @@ const server = polka()
 		res.cookie(
 			'token',
 			JWT.sign({ access_token: response.access_token }, process.env.SECRET, { expiresIn: '7d' }),
-			{ domain: process.env.DOMAIN, path: '/', httpOnly: true, maxAge: 6e8 / 1000, secure: Boolean(process.env.NODE_ENV === 'production') }
+			{ path: '/', httpOnly: true, maxAge: 6e8 / 1000, secure: Boolean(process.env.NODE_ENV === 'production') }
 		);
 
 		return res.send(200, { message: 'Yay!' });
