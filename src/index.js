@@ -62,7 +62,7 @@ const server = polka()
 			body: data
 		})).json();
 
-		res.cookie('token', JWT.sign({ access_token: response.access_token }, 'supersecret', { expiresIn: '7d' }), { domain: 'http://localhost:8000', path: '/', httpOnly: true, maxAge: 6e8 / 1000, secure: false });
+		res.cookie('token', JWT.sign({ access_token: response.access_token }, 'supersecret', { expiresIn: '7d' }), { domain: process.env.DOMAIN, path: '/', httpOnly: true, maxAge: 6e8 / 1000, secure: Boolean(process.env.NODE_ENV === 'production') });
 
 		return res.send(200, { message: 'Yay!' });
 	});
