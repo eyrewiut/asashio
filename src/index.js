@@ -42,7 +42,7 @@ const server = polka()
 		next();
 	})
 	.get('/', (_, res) => res.send(200, { message: 'Asashio!' }))
-	.get('/discord', (_, res) => res.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${process.env.DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(`${process.env.DISCORD_CALLBACK_DOMAIN}${process.env.DISCORD_CALLBACK_PORT}${process.env.DISCORD_CALLBACK_ROUTE}`)}&response_type=code&scope=${process.env.SCOPES.split(',').join('%20')}`))
+	.get('/discord', (_, res) => res.redirect(`https://discordapp.com/api/oauth2/authorize?client_id=${process.env.DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(`${process.env.DISCORD_CALLBACK_DOMAIN}${process.env.DISCORD_CALLBACK_PORT}${process.env.DISCORD_CALLBACK_ROUTE}`)}&response_type=code&scope=${process.env.DISCORD_SCOPES.split(',').join('%20')}`))
 	.get('/discord/callback', async (req, res) => {
 		const accessCode = req.query.code;
 		if (!accessCode) return res.send(400, { message: 'No access code provided.' });
