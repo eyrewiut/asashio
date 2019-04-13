@@ -7,13 +7,15 @@
 	<title>Document</title>
 </head>
 <body>
-	<form action="http://192.168.1.3:8000/discord" method="get">
+	<form action="http://localhost:8000/discord" method="get">
 		<input type="submit" value="Submit">
 	</form>
 	<script>
 		window.onload = async () => {
 			if (!window.location.search) return;
-			await fetch(`http://192.168.1.3:8000/discord/callback${window.location.search}`, { credentials: 'include' });
+			if (window.location.pathname === '/discord/callback') {
+				await fetch(`http://localhost:8000/discord/callback${window.location.search}`, { credentials: 'include' });
+			}
 		}
 	</script>
 </body>
