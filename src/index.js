@@ -60,19 +60,19 @@ const server = polka()
 			body: data
 		})).json();
 
-		res.cookie(
-			'token',
-			JWT.sign({ access_token: response.access_token }, process.env.JWT_SECRET, { expiresIn: '7d' }),
-			{ path: '/', httpOnly: true, maxAge: 6e8 / 1000, secure: Boolean(process.env.NODE_ENV === 'production') }
-		);
-
 		const resp = await (await fetch('https://discordapp.com/api/users/@me', {
 			headers: {
 				authorization: `${response.token_type} ${response.access_token}`
 			}
 		})).json();
 
-		return res.send(200, { message: 'Yay!', data: resp });
+		res.cookie(
+			'token',
+			JWT.sign({ access_token: response.access_token, user: resp }, process.env.JWT_SECRET, { expiresIn: '7d' }),
+			{ path: '/', httpOnly: true, maxAge: 6e8 / 1000, secure: Boolean(process.env.NODE_ENV === 'production') }
+		);
+
+		return res.send(200, { message: 'Yay!', user: resp });
 	});
 
 server.listen(process.env.PORT, () => logger.info(`> Running on localhost:${process.env.PORT}`));
