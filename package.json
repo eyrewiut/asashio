@@ -17,14 +17,14 @@
 		"cors": "^2.8.5",
 		"dotenv": "^8.0.0",
 		"form-data": "^2.5.0",
-		"helmet": "^3.18.0",
+		"helmet": "^3.20.0",
 		"jsonwebtoken": "^8.5.1",
 		"node-fetch": "^2.6.0",
 		"polka": "^0.5.2",
 		"winston": "^3.2.1"
 	},
 	"devDependencies": {
-		"eslint": "^6.0.1",
+		"eslint": "^6.1.0",
 		"eslint-config-aqua": "^6.0.1"
 	},
 	"eslintConfig": {
